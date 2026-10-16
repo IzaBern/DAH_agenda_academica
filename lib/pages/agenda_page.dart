@@ -1,3 +1,5 @@
+import 'package:agenda_academica/widgets/activity_card.dart';
+import 'package:agenda_academica/widgets/agenda_clear.dart';
 import 'package:flutter/material.dart';
 
 class AgendaPage extends StatelessWidget {
@@ -200,6 +202,8 @@ class AgendaPage extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: 15),
+            AgendaClear(),
           ],
         ),
       ),
