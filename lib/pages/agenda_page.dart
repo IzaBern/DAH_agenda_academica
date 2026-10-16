@@ -1,9 +1,12 @@
+import 'package:agenda_academica/core/service_locator.dart';
+import 'package:agenda_academica/store/navigation_store.dart';
 import 'package:agenda_academica/widgets/activity_card.dart';
 import 'package:agenda_academica/widgets/agenda_clear.dart';
 import 'package:flutter/material.dart';
 
 class AgendaPage extends StatelessWidget {
-  const new({super.key});
+  new({super.key});
+  var storePage = getIt<NavigationStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +221,9 @@ class AgendaPage extends StatelessWidget {
                 backgroundColor: Colors.teal,
                 foregroundColor: Colors.white,
               ),
-              onPressed: () {},
+              onPressed: () {
+                storePage.goToNewActivity();
+              },
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Row(

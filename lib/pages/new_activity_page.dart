@@ -1,3 +1,5 @@
+import 'package:agenda_academica/core/service_locator.dart';
+import 'package:agenda_academica/store/navigation_store.dart';
 import 'package:flutter/material.dart';
 
 class NewActivityPage extends StatefulWidget {
@@ -9,6 +11,9 @@ class NewActivityPage extends StatefulWidget {
 
 class _NewActivityPageState extends State<NewActivityPage> {
   bool _individual = true;
+
+  var storePage = getIt<NavigationStore>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +28,9 @@ class _NewActivityPageState extends State<NewActivityPage> {
         centerTitle: true,
         backgroundColor: Colors.teal[100],
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            storePage.goToAgenda();
+          },
           icon: Icon(Icons.arrow_back, size: 30, color: Colors.teal[800]),
         ),
       ),
