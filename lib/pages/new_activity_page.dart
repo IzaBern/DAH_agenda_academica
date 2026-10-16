@@ -1,0 +1,259 @@
+import 'package:flutter/material.dart';
+
+class NewActivityPage extends StatefulWidget {
+  const NewActivityPage({super.key});
+
+  @override
+  State<NewActivityPage> createState() => _NewActivityPageState();
+}
+
+class _NewActivityPageState extends State<NewActivityPage> {
+  bool _individual = true;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Nova Atividade",
+          style: TextStyle(
+            fontWeight: FontWeight(700),
+            color: Colors.teal[800],
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.teal[100],
+        leading: IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.arrow_back, size: 30, color: Colors.teal[800]),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: ListView(
+          children: [
+            Column(
+              children: [
+                Card(
+                  color: const Color.fromARGB(255, 178, 223, 219),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.edit_calendar_outlined,
+                          size: 45,
+                          color: Colors.teal[800],
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Cadastre uma atividade",
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      color: Colors.teal[800],
+                                      fontWeight: FontWeight(700),
+                                    ),
+                                  ),
+                                  Text(
+                                    "Preencha os campos e salve na sua agenda.",
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.title),
+                    border: OutlineInputBorder(),
+                    labelText: "Título da atividade",
+                  ),
+                ),
+                SizedBox(height: 20),
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: "Disciplina",
+                    prefixIcon: Icon(Icons.school_outlined),
+                    border: OutlineInputBorder(),
+                  ),
+                  items: const [
+                    DropdownMenuItem(
+                      value: "programacao",
+                      child: Text("Programação"),
+                    ),
+                    DropdownMenuItem(
+                      value: "bancoDeDados",
+                      child: Text("Banco de Dados"),
+                    ),
+                    DropdownMenuItem(value: "redes", child: Text("Redes")),
+                    DropdownMenuItem(
+                      value: "engenhariaDeSoftware",
+                      child: Text("Engenharia de Software"),
+                    ),
+                  ],
+                  onChanged: (value) {},
+                ),
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: "Tipo",
+                          border: OutlineInputBorder(),
+                        ),
+                        items: const [
+                          DropdownMenuItem(
+                            value: "exercicio",
+                            child: Text("Exercício"),
+                          ),
+                          DropdownMenuItem(
+                            value: "trabalho",
+                            child: Text("Trabalho"),
+                          ),
+                          DropdownMenuItem(
+                            value: "prova",
+                            child: Text("Prova"),
+                          ),
+                          DropdownMenuItem(
+                            value: "projeto",
+                            child: Text("Projeto"),
+                          ),
+                        ],
+                        onChanged: (value) {},
+                      ),
+                    ),
+                    SizedBox(width: 15),
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: "Prioridade",
+                          border: OutlineInputBorder(),
+                        ),
+                        items: const [
+                          DropdownMenuItem(
+                            value: "baixa",
+                            child: Text("Baixa"),
+                          ),
+                          DropdownMenuItem(
+                            value: "media",
+                            child: Text("Média"),
+                          ),
+                          DropdownMenuItem(value: "alta", child: Text("Alta")),
+                        ],
+                        onChanged: (value) {},
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  minLines: 3,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.notes_outlined),
+                    border: OutlineInputBorder(),
+
+                    alignLabelWithHint: true,
+                    labelText: "Descrição",
+                    hintText: "Descreva o que precisa ser feito ...",
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  onTap: () async {
+                    DateTime? dataSelecionada = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2026),
+                      lastDate: DateTime(2100),
+                    );
+                    if (dataSelecionada != null) {}
+                  },
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    labelText: "Data de entrega",
+                    prefixIcon: Icon(Icons.event),
+                    suffixIcon: Icon(Icons.calendar_month),
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.timer_outlined),
+                    suffixText: "min",
+                    border: OutlineInputBorder(),
+                    labelText: "Tempo estimado em minutos",
+                  ),
+                ),
+                SizedBox(height: 20),
+                Card(
+                  elevation: 0,
+                  color: const Color.fromARGB(120, 178, 223, 219),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: SwitchListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 4,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    secondary: Icon(
+                      _individual ? Icons.person_outline : Icons.groups,
+                      size: 35,
+                      color: Colors.teal[800],
+                    ),
+                    title: const Text("Atividade individual"),
+                    subtitle: Text(
+                      _individual
+                          ? "Será realizada individualmente."
+                          : "Será realizada em grupo.",
+                    ),
+                    value: _individual,
+                    onChanged: (valor) => setState(() => _individual = valor),
+                  ),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal[800], // Cor de fundo do botão
+                    foregroundColor: Colors.white, // Cor do texto e ícone
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.save_outlined, size: 26),
+                        SizedBox(width: 15),
+                        Text(
+                          "Salvar atividade",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
