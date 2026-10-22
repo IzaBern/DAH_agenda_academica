@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AgendaClear extends StatelessWidget {
-  const new({super.key});
+  const AgendaClear({super.key});
 
   @override
   Widget build(BuildContext context) {

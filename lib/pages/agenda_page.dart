@@ -1,12 +1,15 @@
 import 'package:agenda_academica/core/service_locator.dart';
+import 'package:agenda_academica/store/activity_store.dart';
 import 'package:agenda_academica/store/navigation_store.dart';
 import 'package:agenda_academica/widgets/activity_card.dart';
 import 'package:agenda_academica/widgets/agenda_clear.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class AgendaPage extends StatelessWidget {
-  new({super.key});
+  AgendaPage({super.key});
   var storePage = getIt<NavigationStore>();
+  final storeActivity = getIt<ActivityStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,114 +54,116 @@ class AgendaPage extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Card(
-                    color: Colors.teal,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.list_alt_outlined,
-                            size: 35,
-                            color: Colors.white,
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            "10",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight(700),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            "Total",
-                            style: TextStyle(
-                              fontWeight: FontWeight(500),
+            Observer(
+              builder: (_) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Card(
+                      color: Colors.teal,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.list_alt_outlined,
+                              size: 35,
                               color: Colors.white,
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 5),
+                            Text(
+                              storeActivity.totalQuantity.toString(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight(700),
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              "Total",
+                              style: TextStyle(
+                                fontWeight: FontWeight(500),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(width: 15),
-                Expanded(
-                  child: Card(
-                    color: Colors.teal,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.access_time_outlined,
-                            size: 35,
-                            color: Colors.white,
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            "4",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight(700),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            "Pendentes",
-                            style: TextStyle(
-                              fontWeight: FontWeight(500),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: Card(
+                      color: Colors.teal,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.access_time_outlined,
+                              size: 35,
                               color: Colors.white,
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 5),
+                            Text(
+                              storeActivity.pendingQuantity.toString(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight(700),
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              "Pendentes",
+                              style: TextStyle(
+                                fontWeight: FontWeight(500),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(width: 15),
-                Expanded(
-                  child: Card(
-                    color: Colors.teal,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.check_circle_outline_outlined,
-                            size: 35,
-                            color: Colors.white,
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            "6",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight(700),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            "Concluídas",
-                            style: TextStyle(
-                              fontWeight: FontWeight(500),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: Card(
+                      color: Colors.teal,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline_outlined,
+                              size: 35,
                               color: Colors.white,
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 5),
+                            Text(
+                              storeActivity.completedQuantity.toString(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight(700),
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              "Concluídas",
+                              style: TextStyle(
+                                fontWeight: FontWeight(500),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(height: 15),
             Card(
@@ -182,31 +187,43 @@ class AgendaPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          "40",
-                          style: TextStyle(
-                            fontWeight: FontWeight(600),
-                            color: Colors.teal[800],
+                    Observer(
+                      builder: (_) => Row(
+                        children: [
+                          Text(
+                            storeActivity.pendingTime.toString(),
+                            style: TextStyle(
+                              fontWeight: FontWeight(600),
+                              color: Colors.teal[800],
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 5),
-                        Text(
-                          "min",
-                          style: TextStyle(
-                            fontWeight: FontWeight(600),
-                            color: Colors.teal[800],
+                          SizedBox(width: 5),
+                          Text(
+                            "min",
+                            style: TextStyle(
+                              fontWeight: FontWeight(600),
+                              color: Colors.teal[800],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
             SizedBox(height: 15),
-            AgendaClear(),
+            Expanded(
+              child: Observer(
+                builder: (_) => (storeActivity.activities.isNotEmpty)
+                    ? ListView.builder(
+                        itemCount: storeActivity.activities.length,
+                        itemBuilder: (a, i) =>
+                            ActivityCard(activity: storeActivity.activities[i]),
+                      )
+                    : AgendaClear(),
+              ),
+            ),
           ],
         ),
       ),
