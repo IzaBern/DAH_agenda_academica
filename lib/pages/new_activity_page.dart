@@ -23,6 +23,9 @@ class _NewActivityPageState extends State<NewActivityPage> {
   String? _priority;
   DateTime? _deadLine;
   bool _individual = true;
+  IconData? _typeIcon;
+  Color? _priorityColor;
+  String? _subjectEmoji;
 
   final storePage = getIt<NavigationStore>();
   final storeActivity = getIt<ActivityStore>();
@@ -47,7 +50,7 @@ class _NewActivityPageState extends State<NewActivityPage> {
 
     storeActivity.addActivity(
       Activity(
-        id: DateTime.now().millisecondsSinceEpoch,
+        id: storeActivity.nextId,
         title: titleController.text.trim(),
         subject: _subject!,
         description: descriptionController.text.trim(),
@@ -56,6 +59,9 @@ class _NewActivityPageState extends State<NewActivityPage> {
         deadLine: _deadLine!,
         time: int.parse(timeController.text),
         individual: _individual,
+        typeIcon: _typeIcon!,
+        priorityColor: _priorityColor!,
+        subjectEmoji: _subjectEmoji!,
       ),
     );
 
@@ -103,23 +109,19 @@ class _NewActivityPageState extends State<NewActivityPage> {
                           ),
                           SizedBox(width: 20),
                           Expanded(
-                            child: Row(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Cadastre uma atividade",
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                        color: Colors.teal[800],
-                                        fontWeight: FontWeight(700),
-                                      ),
-                                    ),
-                                    Text(
-                                      "Preencha os campos e salve na sua agenda.",
-                                    ),
-                                  ],
+                                Text(
+                                  "Cadastre uma atividade",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.teal[800],
+                                    fontWeight: FontWeight(700),
+                                  ),
+                                ),
+                                Text(
+                                  "Preencha os campos e salve na sua agenda.",
                                 ),
                               ],
                             ),
@@ -150,20 +152,32 @@ class _NewActivityPageState extends State<NewActivityPage> {
                     ),
                     items: const [
                       DropdownMenuItem(
-                        value: "programacao",
+                        value: "Programação",
                         child: Text("Programação"),
                       ),
                       DropdownMenuItem(
-                        value: "bancoDeDados",
+                        value: "Banco de Dados",
                         child: Text("Banco de Dados"),
                       ),
-                      DropdownMenuItem(value: "redes", child: Text("Redes")),
+                      DropdownMenuItem(value: "Redes", child: Text("Redes")),
                       DropdownMenuItem(
-                        value: "engenhariaDeSoftware",
+                        value: "Engenharia de Software",
                         child: Text("Engenharia de Software"),
                       ),
                     ],
-                    onChanged: (value) => _subject = value,
+                    onChanged: (value) {
+                      _subject = value;
+                      switch (_subject) {
+                        case "Programação":
+                          _subjectEmoji = "💻";
+                        case "Banco de Dados":
+                          _subjectEmoji = "🗄️";
+                        case "Redes":
+                          _subjectEmoji = "🌐";
+                        case "Engenharia de Software":
+                          _subjectEmoji = "📐";
+                      }
+                    },
                     validator: (v) =>
                         v == null ? "Selecione a disciplina" : null,
                   ),
@@ -179,23 +193,35 @@ class _NewActivityPageState extends State<NewActivityPage> {
                           ),
                           items: const [
                             DropdownMenuItem(
-                              value: "exercicio",
+                              value: "Exercício",
                               child: Text("Exercício"),
                             ),
                             DropdownMenuItem(
-                              value: "trabalho",
+                              value: "Trabalho",
                               child: Text("Trabalho"),
                             ),
                             DropdownMenuItem(
-                              value: "prova",
+                              value: "Prova",
                               child: Text("Prova"),
                             ),
                             DropdownMenuItem(
-                              value: "projeto",
+                              value: "Projeto",
                               child: Text("Projeto"),
                             ),
                           ],
-                          onChanged: (value) => _type = value,
+                          onChanged: (value) {
+                            _type = value;
+                            switch (_type) {
+                              case "Exercício":
+                                _typeIcon = Icons.fitness_center;
+                              case "Trabalho":
+                                _typeIcon = Icons.menu_book;
+                              case "Prova":
+                                _typeIcon = Icons.assignment_late_outlined;
+                              case "Projeto":
+                                _typeIcon = Icons.account_tree_outlined;
+                            }
+                          },
                           validator: (v) =>
                               v == null ? "Selecione o tipo" : null,
                         ),
@@ -209,19 +235,29 @@ class _NewActivityPageState extends State<NewActivityPage> {
                           ),
                           items: const [
                             DropdownMenuItem(
-                              value: "baixa",
+                              value: "Baixa",
                               child: Text("Baixa"),
                             ),
                             DropdownMenuItem(
-                              value: "media",
+                              value: "Média",
                               child: Text("Média"),
                             ),
                             DropdownMenuItem(
-                              value: "alta",
+                              value: "Alta",
                               child: Text("Alta"),
                             ),
                           ],
-                          onChanged: (value) => _priority = value,
+                          onChanged: (value) {
+                            _priority = value;
+                            switch (_priority) {
+                              case "Baixa":
+                                _priorityColor = Colors.green[800];
+                              case "Média":
+                                _priorityColor = Colors.amber[800];
+                              case "Alta":
+                                _priorityColor = Colors.red[600];
+                            }
+                          },
                           validator: (v) =>
                               v == null ? "Selecione a prioridade" : null,
                         ),
@@ -280,7 +316,7 @@ class _NewActivityPageState extends State<NewActivityPage> {
                     ),
                     validator: (v) {
                       final t = int.tryParse(v ?? "");
-                      if (t == null || t < 0) {
+                      if (t == null || t <= 0) {
                         return "Informe um tempo válido em minutos";
                       }
                       return null;

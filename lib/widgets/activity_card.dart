@@ -3,16 +3,10 @@ import 'package:agenda_academica/models/activity.dart';
 import 'package:agenda_academica/store/activity_store.dart';
 import 'package:flutter/material.dart';
 
-class ActivityCard extends StatefulWidget {
-  const ActivityCard({super.key, required this.activity});
+class ActivityCard extends StatelessWidget {
+  ActivityCard({super.key, required this.activity});
   final Activity activity;
-
-  @override
-  State<ActivityCard> createState() => _ActivityCardState();
-}
-
-class _ActivityCardState extends State<ActivityCard> {
-  ActivityStore store = getIt<ActivityStore>();
+  final ActivityStore store = getIt<ActivityStore>();
 
   String _dateFormat(DateTime d) {
     final dia = d.day.toString().padLeft(2, '0');
@@ -25,7 +19,9 @@ class _ActivityCardState extends State<ActivityCard> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Card(
-        color: const Color.fromARGB(255, 178, 223, 219),
+        color: (activity.completed)
+            ? const Color.fromARGB(255, 217, 225, 225)
+            : const Color.fromARGB(255, 178, 223, 219),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -39,36 +35,38 @@ class _ActivityCardState extends State<ActivityCard> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
-                      child: Text("🧑‍💻", style: TextStyle(fontSize: 27)),
+                      child: Text(activity.subjectEmoji, style: TextStyle(fontSize: 27)),
                     ),
                   ),
                   SizedBox(width: 15),
                   Expanded(
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.activity.title,
-                              style: TextStyle(
-                                color: Colors.teal[800],
-                                fontSize: 17,
-                                fontWeight: FontWeight(700),
-                              ),
-                            ),
-                            Text(
-                              widget.activity.subject,
-                              style: TextStyle(color: Colors.teal[800]),
-                            ),
-                          ],
+                        Text(
+                          activity.title,
+                          style: TextStyle(
+                            color: (activity.completed)
+                                ? Colors.blueGrey
+                                : Colors.teal[800],
+                            fontSize: 17,
+                            fontWeight: FontWeight(700),
+
+                            decoration: (activity.completed)
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                          ),
+                        ),
+                        Text(
+                          activity.subject,
+                          style: TextStyle(color: Colors.teal[800]),
                         ),
                       ],
                     ),
                   ),
                   Checkbox(
-                    value: (widget.activity.completed)? true : false,
-                    onChanged: (_) => store.completedToggle(widget.activity.id),
+                    value: activity.completed,
+                    onChanged: (_) => store.completedToggle(activity.id),
                     side: const BorderSide(color: Colors.teal, width: 2.0),
                   ),
                 ],
@@ -77,7 +75,7 @@ class _ActivityCardState extends State<ActivityCard> {
               Row(
                 children: [
                   SizedBox(width: 10),
-                  Expanded(child: Text(softWrap: true, widget.activity.description)),
+                  Expanded(child: Text(softWrap: true, activity.description)),
                 ],
               ),
               SizedBox(height: 10),
@@ -85,7 +83,12 @@ class _ActivityCardState extends State<ActivityCard> {
                 children: [
                   Card(
                     shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.teal, width: 1.3),
+                      side: BorderSide(
+                        color: (activity.completed)
+                            ? Colors.blueGrey
+                            : Colors.teal,
+                        width: 1.3,
+                      ),
                       borderRadius: BorderRadius.circular(16.0),
                     ),
                     child: Padding(
@@ -94,55 +97,78 @@ class _ActivityCardState extends State<ActivityCard> {
                         horizontal: 12,
                       ),
                       child: Row(
-                        children: [
-                          Icon(Icons.edit_note_outlined, color: Colors.teal),
-                          SizedBox(width: 10),
-                          Text(widget.activity.type),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.teal, width: 1.3),
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 12,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.flag_outlined, color: Colors.teal),
-                          SizedBox(width: 10),
-                          Text(widget.activity.priority),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.teal, width: 1.3),
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 12,
-                      ),
-                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            widget.activity.individual
-                                ? Icons.person_outline
-                                : Icons.groups_outlined,
-                            color: Colors.teal,
+                            activity.typeIcon,
+                            color: (activity.completed)
+                                ? Colors.blueGrey
+                                : Colors.teal,
                           ),
                           SizedBox(width: 10),
-                          (widget.activity.individual)
-                              ? Text("Individual")
-                              : Text("Em grupo"),
+                          Text(activity.type),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: (activity.completed)
+                            ? Colors.blueGrey
+                            : activity.priorityColor,
+                        width: 1.3,
+                      ),
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 12,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.flag_outlined,
+                            color: (activity.completed)
+                                ? Colors.blueGrey
+                                : activity.priorityColor,
+                          ),
+                          SizedBox(width: 10),
+                          Text(activity.priority),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: (activity.completed)
+                            ? Colors.blueGrey
+                            : Colors.teal,
+                        width: 1.3,
+                      ),
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 12,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            activity.individual
+                                ? Icons.person_outline
+                                : Icons.groups_outlined,
+                            color: (activity.completed)
+                                ? Colors.blueGrey
+                                : Colors.teal,
+                          ),
+                          SizedBox(width: 10),
+                          Text(activity.individual ? "Individual" : "Em grupo"),
                         ],
                       ),
                     ),
@@ -165,21 +191,19 @@ class _ActivityCardState extends State<ActivityCard> {
                           color: Colors.teal[800],
                         ),
                         SizedBox(width: 5),
-                        Text(_dateFormat(widget.activity.deadLine)),
+                        Text(_dateFormat(activity.deadLine)),
                         SizedBox(width: 20),
                         Icon(
                           Icons.access_time_outlined,
                           color: Colors.teal[800],
                         ),
                         SizedBox(width: 5),
-                        Text(widget.activity.time.toString()),
-                        SizedBox(width: 5),
-                        Text("min"),
+                        Text("${activity.time} min"),
                       ],
                     ),
                   ),
                   IconButton(
-                    onPressed: () => store.removeActivity(widget.activity.id),
+                    onPressed: () => store.removeActivity(activity.id),
                     icon: Icon(
                       Icons.delete_outline,
                       size: 28,

@@ -1,4 +1,3 @@
-import 'package:agenda_academica/core/data/mock_data.dart';
 import 'package:agenda_academica/models/activity.dart';
 import 'package:mobx/mobx.dart';
 part 'activity_store.g.dart';
@@ -7,7 +6,7 @@ class ActivityStore = _ActivityStoreBase with _$ActivityStore;
 
 abstract class _ActivityStoreBase with Store {
   @observable
-  ObservableList<Activity> activities = ObservableList.of(activityList);
+  ObservableList<Activity> activities = ObservableList.of([]);
 
   @computed
   int get totalQuantity => activities.length;
@@ -26,6 +25,9 @@ abstract class _ActivityStoreBase with Store {
   void addActivity(Activity a) {
     activities.add(a);
   }
+
+  int get nextId =>
+    activities.isEmpty ? 1 : activities.map((a) => a.id).reduce((a, b) => a > b ? a : b) + 1;
 
   @action
   void removeActivity(int id) {
