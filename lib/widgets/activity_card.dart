@@ -3,9 +3,15 @@ import 'package:agenda_academica/models/activity.dart';
 import 'package:agenda_academica/store/activity_store.dart';
 import 'package:flutter/material.dart';
 
-class ActivityCard extends StatelessWidget {
-  ActivityCard({super.key, required this.activity});
+class ActivityCard extends StatefulWidget {
+  const ActivityCard({super.key, required this.activity});
   final Activity activity;
+
+  @override
+  State<ActivityCard> createState() => _ActivityCardState();
+}
+
+class _ActivityCardState extends State<ActivityCard> {
   ActivityStore store = getIt<ActivityStore>();
 
   String _dateFormat(DateTime d) {
@@ -44,7 +50,7 @@ class ActivityCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              activity.title,
+                              widget.activity.title,
                               style: TextStyle(
                                 color: Colors.teal[800],
                                 fontSize: 17,
@@ -52,7 +58,7 @@ class ActivityCard extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              activity.subject,
+                              widget.activity.subject,
                               style: TextStyle(color: Colors.teal[800]),
                             ),
                           ],
@@ -61,8 +67,8 @@ class ActivityCard extends StatelessWidget {
                     ),
                   ),
                   Checkbox(
-                    value: (activity.completed)? true : false,
-                    onChanged: (_) => store.completedToggle(activity.id),
+                    value: (widget.activity.completed)? true : false,
+                    onChanged: (_) => store.completedToggle(widget.activity.id),
                     side: const BorderSide(color: Colors.teal, width: 2.0),
                   ),
                 ],
@@ -71,7 +77,7 @@ class ActivityCard extends StatelessWidget {
               Row(
                 children: [
                   SizedBox(width: 10),
-                  Expanded(child: Text(softWrap: true, activity.description)),
+                  Expanded(child: Text(softWrap: true, widget.activity.description)),
                 ],
               ),
               SizedBox(height: 10),
@@ -91,7 +97,7 @@ class ActivityCard extends StatelessWidget {
                         children: [
                           Icon(Icons.edit_note_outlined, color: Colors.teal),
                           SizedBox(width: 10),
-                          Text(activity.type),
+                          Text(widget.activity.type),
                         ],
                       ),
                     ),
@@ -110,7 +116,7 @@ class ActivityCard extends StatelessWidget {
                         children: [
                           Icon(Icons.flag_outlined, color: Colors.teal),
                           SizedBox(width: 10),
-                          Text(activity.priority),
+                          Text(widget.activity.priority),
                         ],
                       ),
                     ),
@@ -128,13 +134,13 @@ class ActivityCard extends StatelessWidget {
                       child: Row(
                         children: [
                           Icon(
-                            activity.individual
+                            widget.activity.individual
                                 ? Icons.person_outline
                                 : Icons.groups_outlined,
                             color: Colors.teal,
                           ),
                           SizedBox(width: 10),
-                          (activity.individual)
+                          (widget.activity.individual)
                               ? Text("Individual")
                               : Text("Em grupo"),
                         ],
@@ -159,21 +165,21 @@ class ActivityCard extends StatelessWidget {
                           color: Colors.teal[800],
                         ),
                         SizedBox(width: 5),
-                        Text(_dateFormat(activity.deadLine)),
+                        Text(_dateFormat(widget.activity.deadLine)),
                         SizedBox(width: 20),
                         Icon(
                           Icons.access_time_outlined,
                           color: Colors.teal[800],
                         ),
                         SizedBox(width: 5),
-                        Text(activity.time.toString()),
+                        Text(widget.activity.time.toString()),
                         SizedBox(width: 5),
                         Text("min"),
                       ],
                     ),
                   ),
                   IconButton(
-                    onPressed: () => store.removeActivity(activity.id),
+                    onPressed: () => store.removeActivity(widget.activity.id),
                     icon: Icon(
                       Icons.delete_outline,
                       size: 28,

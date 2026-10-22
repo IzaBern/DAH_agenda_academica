@@ -6,9 +6,16 @@ import 'package:agenda_academica/widgets/agenda_clear.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-class AgendaPage extends StatelessWidget {
-  AgendaPage({super.key});
+class AgendaPage extends StatefulWidget {
+  const AgendaPage({super.key});
+
+  @override
+  State<AgendaPage> createState() => _AgendaPageState();
+}
+
+class _AgendaPageState extends State<AgendaPage> {
   var storePage = getIt<NavigationStore>();
+
   final storeActivity = getIt<ActivityStore>();
 
   @override
