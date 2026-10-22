@@ -98,6 +98,18 @@ mixin _$ActivityStore on _ActivityStoreBase, Store {
   }
 
   @override
+  void removeAll() {
+    final _$actionInfo = _$_ActivityStoreBaseActionController.startAction(
+      name: '_ActivityStoreBase.removeAll',
+    );
+    try {
+      return super.removeAll();
+    } finally {
+      _$_ActivityStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 activities: ${activities},

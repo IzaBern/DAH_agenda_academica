@@ -33,7 +33,7 @@ class _AgendaPageState extends State<AgendaPage> {
         backgroundColor: Colors.teal[100],
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => storeActivity.removeAll(),
             icon: Icon(
               Icons.cleaning_services_outlined,
               size: 30,

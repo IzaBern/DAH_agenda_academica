@@ -26,8 +26,9 @@ abstract class _ActivityStoreBase with Store {
     activities.add(a);
   }
 
-  int get nextId =>
-    activities.isEmpty ? 1 : activities.map((a) => a.id).reduce((a, b) => a > b ? a : b) + 1;
+  int get nextId => activities.isEmpty
+      ? 1
+      : activities.map((a) => a.id).reduce((a, b) => a > b ? a : b) + 1;
 
   @action
   void removeActivity(int id) {
@@ -39,5 +40,10 @@ abstract class _ActivityStoreBase with Store {
     final i = activities.indexWhere((a) => a.id == id);
     if (i == -1) return;
     activities[i] = activities[i].copyWith(completed: !activities[i].completed);
+  }
+
+  @action
+  void removeAll() {
+    activities.clear();
   }
 }
